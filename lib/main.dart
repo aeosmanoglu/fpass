@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fpass/motor.dart';
+import 'package:fpass/obj.dart';
+import 'package:fpass/settings.dart';
+
+import 'motor.dart';
 
 void main() => runApp(MyApp());
 
@@ -22,13 +26,50 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  Future<List<Data>> logins;
+
+  @override
+  initState() {
+    super.initState();
+    logins = Motor().list();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("G-PASS"),
+        actions: <Widget>[
+          IconButton(icon: Icon(Icons.settings), onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => Settings()));
+          })
+        ],
       ),
-      body: Center(),
+      body: FutureBuilder(
+        future: logins,
+        builder: (context, AsyncSnapshot<List<Data>> snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return ListView.builder(
+              itemCount: snapshot.data.length,
+              itemBuilder: (context, index) {
+                return Card(
+                  child: ListTile(
+                    title: Text(snapshot.data[index].uRL),
+                    subtitle: Text(snapshot.data[index].username),
+                    trailing: Text(snapshot.data[index].password),
+                  ),
+                );
+              },
+            );
+
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+        },
+      ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: _showDialog,
@@ -55,11 +96,14 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               TextField(
                 decoration: InputDecoration(labelText: "Username"),
+                autocorrect: false,
                 onChanged: (text) {
                   username = text;
                 },
               ),
               TextField(
+                autocorrect: false,
+                obscureText: true,
                 decoration: InputDecoration(labelText: "Password", helperText: "Leave blank for a random password"),
                 onChanged: (text) {
                   password = text;
@@ -80,6 +124,9 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () {
                 Motor().create(title, username, password: password);
                 Navigator.of(context).pop();
+                setState(() {
+
+                });
               },
             ),
           ],

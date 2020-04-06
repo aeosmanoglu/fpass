@@ -1,16 +1,21 @@
-# fpass
+# Fpass
 
 Flutter Gpass application.
 
-## Getting Started
+[gpass](https://github.com/yakuter/gpass) is an open source password manager API written with Go by [Yakuter](https://github.com/yakuter).
 
-This project is a starting point for a Flutter application.
+ ## TO-DO
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+ - [x] List all logins
+   - [ ] List settings
+   - [x] Add divider
+   - [ ] Slide for delete
+   - [ ] Drag for refresh
+   - [ ] Sharable login
+   - [ ] Monospace password
+ - [x] Create new login
+   - [ ] Avoid null data
+ - [x] Setting page
+ - [ ] Add pin/biometric security
+ - [ ] Localize
+ - [ ] Dynamic light/dark mode
