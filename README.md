@@ -9,10 +9,10 @@ Flutter Gpass application.
  - [x] List all logins
    - [ ] List settings
    - [x] Add divider
-   - [ ] Slide for delete
-   - [ ] Drag for refresh
+   - [x] Slide for delete
+   - [x] Drag for refresh
    - [ ] Sharable login
-   - [ ] Monospace password
+   - [x] Monospace password
  - [x] Create new login
    - [ ] Avoid null data
  - [x] Setting page

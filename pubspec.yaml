@@ -27,6 +27,10 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  fonts:
+    - family: mono
+      fonts:
+        - asset: fonts/RobotoMono.ttf
 
   # To add assets to your application, add an assets section, like this:
   # assets:

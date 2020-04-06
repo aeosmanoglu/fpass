@@ -18,9 +18,7 @@ class Motor {
     String url = server + "/logins/";
     Map<String, String> headers = {"authorization": "Basic $auth"};
     String body = jsonEncode({"URL": title, "Username": username, "Password": password});
-    Response response = await post(url, headers: headers, body: body);
-    print("create");
-    print(response.statusCode);
+    await post(url, headers: headers, body: body);
   }
 
   Future<List<Data>> list() async {
@@ -33,7 +31,13 @@ class Motor {
     obj.data.forEach((element) {
       list.add(element);
     });
-
     return list;
+  }
+
+  del(int id) async {
+    await _get();
+    String url = server + "/logins/$id";
+    Map<String, String> headers = {"authorization": "Basic $auth"};
+    await delete(url, headers: headers);
   }
 }

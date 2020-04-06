@@ -4,6 +4,7 @@ import 'package:fpass/obj.dart';
 import 'package:fpass/settings.dart';
 
 import 'motor.dart';
+import 'motor.dart';
 
 void main() => runApp(MyApp());
 
@@ -40,35 +41,56 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text("G-PASS"),
         actions: <Widget>[
-          IconButton(icon: Icon(Icons.settings), onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => Settings()));
-          })
+          IconButton(
+              icon: Icon(Icons.settings),
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => Settings()));
+              })
         ],
       ),
-      body: FutureBuilder(
-        future: logins,
-        builder: (context, AsyncSnapshot<List<Data>> snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return ListView.builder(
-              itemCount: snapshot.data.length,
-              itemBuilder: (context, index) {
-                return Card(
-                  child: ListTile(
-                    title: Text(snapshot.data[index].uRL),
-                    subtitle: Text(snapshot.data[index].username),
-                    trailing: Text(snapshot.data[index].password),
-                  ),
-                );
-              },
-            );
-
-          } else {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-
-        },
+      body: RefreshIndicator(
+        onRefresh: refresh,
+        child: FutureBuilder(
+          future: logins,
+          builder: (context, AsyncSnapshot<List<Data>> snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              return ListView.builder(
+                itemCount: snapshot.data.length,
+                itemBuilder: (context, index) {
+                  return Dismissible(
+                    key: UniqueKey(),
+                    direction: DismissDirection.endToStart,
+                    background: Container(
+                      color: Colors.red,
+                      alignment: AlignmentDirectional.centerEnd,
+                      child: Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(0, 0, 28, 0),
+                        child: Icon(
+                          Icons.delete_sweep,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    onDismissed: (direction) {
+                      Motor().del(snapshot.data[index].iD);
+                    },
+                    child: Card(
+                      child: ListTile(
+                        title: Text(snapshot.data[index].uRL),
+                        subtitle: Text(snapshot.data[index].username),
+                        trailing: Text(snapshot.data[index].password, style: TextStyle(fontFamily: "mono"),),
+                      ),
+                    ),
+                  );
+                },
+              );
+            } else {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
@@ -124,14 +146,20 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () {
                 Motor().create(title, username, password: password);
                 Navigator.of(context).pop();
-                setState(() {
-
-                });
+                setState(() {});
               },
             ),
           ],
         );
       },
     );
+  }
+
+  Future<Null> refresh() async {
+    await new Future.delayed(new Duration(milliseconds: 399));
+    setState(() {
+
+    });
+    return null;
   }
 }
